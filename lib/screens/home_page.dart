@@ -15,6 +15,7 @@ import 'package:miles_task/custom_widgets/class_2024_widget.dart';
 import 'package:miles_task/custom_widgets/crisis_card_widget.dart';
 import 'package:miles_task/screens/video_show_page.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../custom_widgets/american_dream_card_widget.dart';
 
@@ -37,9 +38,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        height: 100,
-        child: BottomNavigationComponent()),
+      bottomNavigationBar:
+          Container(height: 100, child: BottomNavigationComponent()),
       backgroundColor: colorBlack,
       appBar: AppBar(
         actions: [
@@ -86,10 +86,22 @@ class _HomePageState extends State<HomePage> {
                               width: 240,
                               child: Align(
                                 alignment: Alignment.centerRight,
-                                child: GifView.asset(
-                                  'assets/call_button.gif',
-                                  height: 100,
-                                  frameRate: 30,
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    Logger().w("button is tapped");
+                                    final phoneNumber =
+                                        'tel:+1234567890'; // Replace with your desired phone number
+                                    if (await canLaunch(phoneNumber)) {
+                                      await launch(phoneNumber);
+                                    } else {
+                                      Logger().e("Could not launch dial pad");
+                                    }
+                                  },
+                                  child: GifView.asset(
+                                    'assets/call_button.gif',
+                                    height: 100,
+                                    frameRate: 30,
+                                  ),
                                 ),
                               ),
                             ),
@@ -421,7 +433,6 @@ class _HomePageState extends State<HomePage> {
                                     fontSize: 12,
                                     color: Color(0xffd5dbe2),
                                   ),
-                                
                                 ),
                               ),
                             ],
